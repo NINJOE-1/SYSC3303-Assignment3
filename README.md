@@ -23,16 +23,16 @@ The file that will test the Pelican state machine system.
 The superstate of the state machine.
 
 ### Vehicle
-#### [VehicleEnabled.java](src/PELICAN/States/Vehicle/VehicleEnabled.java)
+#### [VehicleEnabled.java](src/PELICAN/States/Vehicles/VehicleEnabled.java)
 Implements the state-specific behavior for the Vehicle Enabled state.
 
-#### [Green.java](src/PELICAN/States/Vehicle/Green.java)
+#### [Green.java](src/PELICAN/States/Vehicles/Green.java)
 The state for the green light as a substate of VehicleEnabled.
 
-#### [GreenInt.java](src/PELICAN/States/Vehicle/GreenInt.java)
+#### [GreenInt.java](src/PELICAN/States/Vehicles/GreenInt.java)
 The state for the green light interrupt as a substate of VehicleEnabled.
 
-#### [Yellow.java](src/PELICAN/States/Vehicle/Yellow.java)
+#### [Yellow.java](src/PELICAN/States/Vehicles/Yellow.java)
 The state for the yellow light as a substate of VehicleEnabled.
 
 ### Pedestrians
@@ -91,6 +91,13 @@ STATE- Flash
 ## Questions and Answers
 1. **There is a defect in the design which will annoy law-abiding pedestrians.**
 
-The defect in the 
+The defect in the state model is that the system will only exit the green state under vehicles through a TIMEOUT event which will then cycle through
+the yellow state (if a pedestrian is waiting) or to the interruptable green state. The solution to this defect would be to modify the initial
+TIMEOUT point in the green state to exit upon triggering the pedestrian waiting event. This way the pedestrians are not waiting the entire time duration.
 
 2. **There is a second error in the design.**
+
+The second error in the design is that the timeout event which triggers when transitioning from the flash state should tell the pedestrian to not walk,
+instead it sends the blank signal. This means that there is no don't walk signal for pedestrians. The solution would be to modify the state machine
+to implement an alternate design to switch to the don't walk state on the exit action of pedestriansEnabled, and one when switching to a red light
+for the vehicles.
